@@ -1,0 +1,57 @@
+name: Cross-platform CI
+
+on:
+  push:
+    branches:
+      - develop
+      - master
+      - feature/**
+  pull_request:
+    branches:
+      - develop
+      - master
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Run Windows build and test
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: call ci.bat
+
+      - name: Run Unix build and test
+        if: runner.os != 'Windows'
+        shell: bash
+        run: bash ci.sh
+
+      - name: Upload Windows artifact
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: hello-windows
+          path: dist/hello.exe
+          if-no-files-found: error
+
+      - name: Upload Unix artifact
+        if: runner.os != 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: hello-${{ runner.os }}
+          path: dist/hello
+          if-no-files-found: error
