@@ -25,6 +25,8 @@
 - Python
 - віртуальне середовище `venv`
 - `pytest`
+- PyInstaller
+- PyYAML
 - GitHub Actions
 - операційні системи Windows, Linux і macOS
 
@@ -34,3 +36,4 @@
 
 - [Архітектура проєкту](docs/architecture.md)
 - [Журнал роботи AI-агента](docs/ai-log.md)
+- [Інструкція використання агента](docs/usage.md)
